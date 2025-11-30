@@ -6,7 +6,7 @@ const UserCard = ({ username, email, isOnline, badges }) => {
     <div className="card">
       <h2>{username}</h2>
       <p>{email}</p>
-      <span>Status: {isOnline ? 'Active' : 'Offline'}</span>
+      <span>Status 123: {isOnline ? 'Active' : 'Offline'}</span>
       <ul>
         {badges.map((badge, index) => (
           <li key={index}>{badge}</li>
