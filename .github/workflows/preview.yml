@@ -1,0 +1,53 @@
+name: AI Component Preview
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build-and-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v3
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: 📦 Install Dependencies
+        run: npm install
+
+      - name: 🧠 Run AI Preview Generator
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: npm run preview
+
+      - name: 🚀 Deploy to GitHub Pages (Preview Folder)
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          destination_dir: pr-${{ github.event.number }}
+          keep_files: true # Don't delete other PR previews!
+
+      - name: 💬 Post Comment on PR
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const repoName = context.repo.repo;
+            const owner = context.repo.owner;
+            const previewUrl = `https://${owner}.github.io/${repoName}/pr-${prNumber}/`;
+
+            github.rest.issues.createComment({
+              owner: owner,
+              repo: repoName,
+              issue_number: prNumber,
+              body: `## 🚀 AI Component Preview Ready!\n\nI have generated a mock preview for your component changes.\n\n**[Click here to view the AI Preview](${previewUrl})**`
+            });
