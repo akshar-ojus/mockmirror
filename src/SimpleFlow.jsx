@@ -13,7 +13,7 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 
 // Import data from File 1
-import { initialNodes, initialEdges } from './initialElements';
+import { initialNodes, initialEdges } from './InitialElements';
 
 export default function SimpleFlow() {
   // These hooks handle the state of nodes and edges (dragging, selecting, etc.)
