@@ -1,5 +1,4 @@
 // src/SimpleFlow.js
-// A simple React Flow setup to visualize nodes and edges
 import React, { useCallback } from 'react';
 import ReactFlow, {
   MiniMap,
