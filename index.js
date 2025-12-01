@@ -1,22 +1,28 @@
 // index.js
 const { execSync } = require('child_process');
 
-console.log("🚀 Starting AI Component Preview...");
+// Capture ALL arguments (e.g. src/UserCard.jsx src/SmartLink.jsx)
+const targetFiles = process.argv.slice(2).join(' ');
+
+if (!targetFiles) {
+  console.error("❌ Error: No files specified.");
+  process.exit(1);
+}
+
+console.log(`🚀 Starting AI Dashboard for: ${targetFiles}`);
 
 try {
-  // Step 1: Run the Analyzer
-  console.log("\n--- STEP 1: ANALYZING COMPONENT ---");
-  // We use 'stdio: inherit' so you see the logs from analyze.js in real-time
-  execSync('node analyze.js', { stdio: 'inherit' });
+  console.log("\n--- STEP 1: ANALYZING ---");
+  execSync(`node analyze.js ${targetFiles}`, { stdio: 'inherit' });
 
-  // Step 2: Run the Builder
-  console.log("\n--- STEP 2: BUILDING PREVIEW ---");
-  execSync('node build.js', { stdio: 'inherit' });
+  console.log("\n--- STEP 2: BUILDING ---");
+  // build.js reads the analysis.json, so it doesn't strictly need args, 
+  // but we can pass them if we ever need to. For now, no args needed.
+  execSync(`node build.js`, { stdio: 'inherit' });
 
-  console.log("\n✅ DONE! Run 'npx vite preview' to see the result.");
+  console.log("\n✅ DONE! Run 'npx vite preview' to see the dashboard.");
 
 } catch (error) {
-  console.error("\n❌ Something went wrong.");
-  // The specific error would have been printed by the individual scripts
+  console.error("\n❌ Execution failed.");
   process.exit(1);
 }
