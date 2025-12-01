@@ -1,7 +1,7 @@
-// index.js
 const { execSync } = require('child_process');
+const path = require('path');
 
-// Capture ALL arguments (e.g. src/UserCard.jsx src/SmartLink.jsx)
+// Capture ALL arguments
 const targetFiles = process.argv.slice(2).join(' ');
 
 if (!targetFiles) {
@@ -9,20 +9,23 @@ if (!targetFiles) {
   process.exit(1);
 }
 
-console.log(`🚀 Starting AI Dashboard for: ${targetFiles}`);
+// Get the directory where THIS script lives (The Action folder)
+const scriptDir = __dirname;
+
+console.log(`🚀 Starting MockMirror for: ${targetFiles}`);
 
 try {
   console.log("\n--- STEP 1: ANALYZING ---");
-  execSync(`node analyze.js ${targetFiles}`, { stdio: 'inherit' });
+  // Run analyze.js from the scriptDir
+  execSync(`node "${path.join(scriptDir, 'analyze.js')}" ${targetFiles}`, { stdio: 'inherit' });
 
   console.log("\n--- STEP 2: BUILDING ---");
-  // build.js reads the analysis.json, so it doesn't strictly need args, 
-  // but we can pass them if we ever need to. For now, no args needed.
-  execSync(`node build.js`, { stdio: 'inherit' });
+  // Run build.js from the scriptDir
+  execSync(`node "${path.join(scriptDir, 'build.js')}"`, { stdio: 'inherit' });
 
-  console.log("\n✅ DONE! Run 'npx vite preview' to see the dashboard.");
+  console.log("\n✅ DONE! Preview build complete.");
 
 } catch (error) {
-  console.error("\n❌ Execution failed.");
+  console.error("\n❌ Execution failed:", error.message);
   process.exit(1);
 }
