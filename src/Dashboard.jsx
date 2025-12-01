@@ -15,9 +15,11 @@ const Dashboard = () => {
   return (
     <div style={{ fontFamily: 'sans-serif', padding: '40px', maxWidth: '800px', margin: '0 auto' }}>
       <header style={{ marginBottom: '40px', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '2.5rem', color: '#333' }}>🚀 AI Preview Dashboard</h1>
+        <h1 style={{ fontSize: '2.5rem', color: '#333' }}>MockMirror</h1>
         <p style={{ color: '#666' }}>
+          Reflecting your code changes with AI-generated data.
           {previews.length} component{previews.length !== 1 ? 's' : ''} modified in this PR.
+
         </p>
       </header>
 
