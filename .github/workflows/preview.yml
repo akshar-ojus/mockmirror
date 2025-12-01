@@ -84,8 +84,7 @@ jobs:
           done
           echo "⚠️ Timeout: Site didn't go live within 2 minutes. Proceeding anyway."
 
-      - name: 💬 Post Comment on PR
-        # Only run if deployment happened
+      - name: 💬 Post or Update Comment
         if: steps.ai_preview.outputs.should_deploy == 'true'
         uses: actions/github-script@v6
         with:
@@ -94,10 +93,37 @@ jobs:
             const repoName = context.repo.repo;
             const owner = context.repo.owner;
             const previewUrl = `https://${owner}.github.io/${repoName}/pr-${prNumber}/`;
+            const header = '## 🚀 Smart AI Preview Ready!';
+            const body = `${header}\n\nI analyzed your code and generated a custom preview.\n\n**[Click here to view the Preview](${previewUrl})**\n\n_(Last updated: ${new Date().toLocaleString()})_`;
 
-            github.rest.issues.createComment({
+            // 1. Get all comments on this PR
+            const { data: comments } = await github.rest.issues.listComments({
               owner: owner,
               repo: repoName,
               issue_number: prNumber,
-              body: `## 🚀 Smart AI Preview Ready!\n\nI analyzed your code and generated a custom preview.\n\n**[Click here to view the Preview](${previewUrl})**`
             });
+
+            // 2. Find if the bot already commented
+            const botComment = comments.find(comment => 
+              comment.user.type === 'Bot' && 
+              comment.body.includes(header)
+            );
+
+            // 3. Update existing or Create new
+            if (botComment) {
+              console.log(`Updating existing comment ID: ${botComment.id}`);
+              await github.rest.issues.updateComment({
+                owner: owner,
+                repo: repoName,
+                comment_id: botComment.id,
+                body: body
+              });
+            } else {
+              console.log("Creating a new comment");
+              await github.rest.issues.createComment({
+                owner: owner,
+                repo: repoName,
+                issue_number: prNumber,
+                body: body
+              });
+            }
