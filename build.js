@@ -107,7 +107,7 @@ async function buildDashboard() {
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>AI Preview Dashboard</title>
+        <title>MockMirror Dashboard</title>
         <style>body { margin: 0; background-color: #f8f9fa; }</style>
       </head>
       <body>

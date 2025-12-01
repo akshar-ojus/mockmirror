@@ -1,4 +1,5 @@
 // src/App.js
+// Main application component
 import React from 'react';
 import SimpleFlow from './SimpleFlow';
 
