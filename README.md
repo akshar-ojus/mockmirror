@@ -49,7 +49,7 @@ jobs:
           fetch-depth: 0 # Important for detecting changes
       - name: Run MockMirror
         # Note: Replace your-username/ai-previewer with your actual repository name
-        uses: your-username/ai-previewer@v1.0.0
+        uses: your-username/mockmirror@v1
         with:
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
